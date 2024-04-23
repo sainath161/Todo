@@ -17,6 +17,7 @@ const store = new mongoDBSession({
   uri: process.env.MONGO_URI,
   collection: "sessions",
 });
+const Schema = mongoose.Schema;
 
 // DB connection
 mongoose
@@ -90,12 +91,8 @@ app.post("/register-form", async (req, res) => {
     });
 
     // Save the data to database
-    const userDb = await userObj.save();
-    return res.send({
-      status: 201,
-      message: "User created successfully!",
-      data: userDb,
-    });
+    await userObj.save();
+    return res.redirect("/login");
   } catch (error) {
     return res.send({
       status: 500,
@@ -148,10 +145,10 @@ app.post("/login-form", async (req, res) => {
     req.session.user = {
       username: userData.username,
       email: userData.email,
-      userId: userData._id,
+      userId: userData._id, // BSON error userData._id.toString()
     };
 
-    return res.status(200).json("Login Successful!");
+    return res.redirect("/dashboard");
   } catch (error) {
     return res.status(400).json({
       status: 500,
@@ -166,8 +163,40 @@ app.post("/login-form", async (req, res) => {
   // });
 });
 
-app.get("/check", isAuth, (req, res) => {
-  return res.send("Dashboard Page!");
+app.get("/dashboard", isAuth, (req, res) => {
+  return res.render("dashboard");
+});
+
+app.post("/logout", isAuth, (req, res) => {
+  req.session.destroy((err) => {
+    if (err) throw err;
+    return res.redirect("/login");
+  });
+});
+
+app.post("/logout_from_all_devices", isAuth, async (req, res) => {
+  console.log(req.session);
+
+  const username = req.session.user.username;
+
+  const sessionSchema = new Schema({ _id: String }, { strict: false });
+
+  const sessionModel = mongoose.model("sessions", sessionSchema);
+
+  try {
+    const deleteData = await sessionModel.deleteMany({
+      "session.user.username": username,
+    });
+    console.log(deleteData);
+    return res.send({
+      status: 200,
+      message: "Logged out from all devices successfully.",
+      data: deleteData,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.redirect("/login");
+  }
 });
 
 app.listen(PORT, () => {
