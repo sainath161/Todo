@@ -1,77 +1,16 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simple To-Do App</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-      crossorigin="anonymous"
-    />
-    <style>
-      .button-64 {
-        align-items: center;
-        background-image: linear-gradient(
-          144deg,
-          #af40ff,
-          #5b42f3 50%,
-          #00ddeb
-        );
-        border: 0;
-        border-radius: 8px;
-        box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
-        box-sizing: border-box;
-        color: #ffffff;
-        display: flex;
-        font-family: Phantomsans, sans-serif;
-        font-size: 20px;
-        justify-content: center;
-        line-height: 1em;
-        max-width: 100%;
-        min-width: 140px;
-        padding: 3px;
-        text-decoration: none;
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
-        white-space: nowrap;
-        cursor: pointer;
-      }
-
-      .button-64:active,
-      .button-64:hover {
-        outline: 0;
-      }
-
-      .button-64 span {
-        background-color: rgb(5, 6, 45);
-        padding: 16px 24px;
-        border-radius: 6px;
-        width: 100%;
-        height: 100%;
-        transition: 300ms;
-      }
-
-      .button-64:hover span {
-        background: none;
-      }
-
-      @media (min-width: 768px) {
-        .button-64 {
-          font-size: 24px;
-          min-width: 196px;
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="container">
-      <h1 class="display-4 text-center py-1">To-Do App</h1>
-
-      <div class="jumbotron p-3 shadow-sm">
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Simple To-Do App</title>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    </head>
+    <body>
+      <div class="container">
+        <h1 class="display-4 text-center py-1">To-Do App</h1>
+        
+        <div class="jumbotron p-3 shadow-sm">
         <form id="create_form" action="/create-item" method="POST">
           <div class="d-flex align-items-center">
             <input
@@ -79,7 +18,7 @@
               name="todo"
               autofocus
               autocomplete="off"
-              class="form-control me-3"
+              class="form-control mr-3"
               type="text"
               style="flex: 1"
             />
@@ -88,18 +27,23 @@
         </form>
       </div>
 
-      <ul id="item_list" class="" list-group pb-5></ul>
+        <ul id="item_list" class=""list-group pb-5>
 
-      <form action="/logout" method="POST" class="mb-2">
-        <button class="button-64" role="button">
-          <span class="text">Logout</span>
-        </button>
+
+        </ul>
+    
+        <!-- <button class="show_more">Show More</button> -->
+        <br/>
+        <br/>
+      <form action='/logout' method="POST">
+        <button> Logout <button>
       </form>
-      <form action="/logout_from_all_devices" method="POST">
-        <button class="button-64" role="button">
-          <span class="text">Logout from all devices</span>
-        </button>
+      <form action='/logout_from_all_devices' method="POST">
+        <button> Logout from all devices <button>
       </form>
-    </div>
-  </body>
-</html>
+
+      </div>
+      <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+      <script src="/browser.js"></script>
+    </body>
+    </html>
