@@ -114,8 +114,6 @@ app.get("/login", (req, res) => {
 });
 
 app.post("/login-user", async (req, res) => {
-  console.log(req.body);
-
   const { loginId, password } = req.body;
 
   if (!loginId || !password) return res.status(400).json("Missing credentials");
@@ -128,7 +126,6 @@ app.post("/login-user", async (req, res) => {
     } else {
       userDb = await userModel.findOne({ username: loginId });
     }
-    console.log(userDb);
 
     if (!userDb) {
       return res.send({
@@ -150,7 +147,6 @@ app.post("/login-user", async (req, res) => {
 
     //session base auth
 
-    console.log(req.session);
     req.session.isAuth = true;
     req.session.user = {
       username: userDb.username,
@@ -173,18 +169,14 @@ app.get("/dashboard", isAuth, (req, res) => {
 });
 
 app.post("/logout", isAuth, (req, res) => {
-  console.log(req.session);
   req.session.destroy((err) => {
     if (err) throw err;
-    console.log(req.session);
 
     return res.redirect("/login");
   });
 });
 
 app.post("/logout_from_all_devices", isAuth, async (req, res) => {
-  console.log(req.session);
-
   const username = req.session.user.username;
   const sessionSchema = new Schema({ _id: String }, { strict: false });
   const sessionModel = mongoose.model("session", sessionSchema);
@@ -193,8 +185,6 @@ app.post("/logout_from_all_devices", isAuth, async (req, res) => {
     const deleteDb = await sessionModel.deleteMany({
       "session.user.username": username,
     });
-
-    console.log(deleteDb);
 
     return res.send({
       status: 200,
@@ -271,15 +261,7 @@ app.get("/read-item", isAuth, async (req, res) => {
       {
         $limit: LIMIT,
       },
-      // {
-      //   $facet: {
-      //     data: [{ $skip: SKIP }, { $limit: LIMIT }],
-      //   },
-      // },
-      // todoDb[0].data
     ]);
-
-    console.log(todoDb);
 
     if (todoDb.length === 0) {
       return res.send({
@@ -358,7 +340,6 @@ app.post("/edit-item", isAuth, async (req, res) => {
       data: prevTodo,
     });
   } catch (error) {
-    console.log(error);
     return res.send({
       status: 500,
       message: "Internal server error",
@@ -370,7 +351,6 @@ app.post("/edit-item", isAuth, async (req, res) => {
 });
 
 app.delete("/delete-item", isAuth, async (req, res) => {
-  console.log(req.body);
   const { todoId } = req.body;
   const username = req.session.user.username;
 
@@ -413,7 +393,6 @@ app.delete("/delete-item", isAuth, async (req, res) => {
       data: deletedTodo,
     });
   } catch (error) {
-    console.log(error);
     return res.send({
       status: 500,
       message: "Internal server error",

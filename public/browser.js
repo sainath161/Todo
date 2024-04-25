@@ -34,7 +34,6 @@ function genrateTodos() {
 
 document.addEventListener("click", function (event) {
   if (event.target.classList.contains("edit-me")) {
-    console.log("edit me clicked");
     const newData = prompt("Enter new Todo text");
     const todoId = event.target.getAttribute("data-id");
 
@@ -53,7 +52,6 @@ document.addEventListener("click", function (event) {
       .catch((err) => console.log(err));
   } else if (event.target.classList.contains("delete-me")) {
     const todoId = event.target.getAttribute("data-id");
-    console.log(todoId);
     axios
       .delete("/delete-item", { data: { todoId: todoId } })
       .then((res) => {
@@ -66,7 +64,6 @@ document.addEventListener("click", function (event) {
       })
       .catch((err) => console.log(err));
   } else if (event.target.classList.contains("add_item")) {
-    console.log(document.getElementById("create_field").value);
     const todo = document.getElementById("create_field").value;
 
     axios
@@ -76,7 +73,6 @@ document.addEventListener("click", function (event) {
           alert(res.data.message);
           return;
         }
-        console.log(res);
         document.getElementById("create_field").value = "";
 
         document.getElementById("item_list").insertAdjacentHTML(

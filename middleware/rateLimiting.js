@@ -1,8 +1,6 @@
 const accessModel = require("../models/accessModel");
 
 const rateLimiting = async (req, res, next) => {
-  console.log("rate limit middle ware");
-
   const sid = req.session.id;
   //find the entry in accessDB
 
@@ -10,7 +8,6 @@ const rateLimiting = async (req, res, next) => {
     const accessDb = await accessModel.findOne({ sessionId: sid });
 
     //if null then it's first request
-    console.log(accessDb);
     if (!accessDb) {
       const accessObj = new accessModel({
         sessionId: sid,
@@ -23,7 +20,6 @@ const rateLimiting = async (req, res, next) => {
     }
 
     //R2 -- Rnth, compare the time diff
-    console.log((Date.now() - accessDb.req_time) / 1000);
     const diff = (Date.now() - accessDb.req_time) / 1000;
 
     // 1hit / per second
