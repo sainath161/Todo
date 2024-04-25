@@ -1,43 +1,171 @@
 <!DOCTYPE html>
-    <html>
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Simple To-Do App</title>
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    </head>
-    <body>
-      <div class="container">
-        <h1 class="display-4 text-center py-1">To-Do App</h1>
-        
-        <div class="jumbotron p-3 shadow-sm">
-         
-            <div class="d-flex align-items-center">
-              <input id="create_field" name='todo' autofocus autocomplete="off" class="form-control mr-3" type="text" style="flex: 1;">
-              <button class="add_item btn btn-primary">Add New Item</button>
-            </div>
-        
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple To-Do App</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
+    />
+  </head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .show_more_btn {
+      position: relative;
+      background: #444;
+      color: #fff;
+      text-decoration: none;
+      text-transform: uppercase;
+      border: none;
+      letter-spacing: 0.1rem;
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+      transition: 0.2s;
+      border-radius: 10px;
+    }
+
+    .show_more_btn:hover {
+      letter-spacing: 0.1rem;
+      padding: 0.6rem 1.1rem;
+      background: var(--clr);
+      color: var(--clr);
+      animation: box 3s infinite;
+      cursor: pointer;
+    }
+
+    .show_more_btn::before {
+      content: "";
+      position: absolute;
+      inset: 2px;
+      background: #272822;
+      border-radius: 10px;
+    }
+
+    .show_more_btn .show_more {
+      position: relative;
+      z-index: 1;
+    }
+    .show_more_btn i {
+      position: absolute;
+      inset: 0;
+      display: block;
+    }
+
+    .show_more_btn i::before {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 2px;
+      left: 80%;
+      top: -2px;
+      border: 2px solid var(--clr);
+      background: #272822;
+      transition: 0.2s;
+    }
+
+    .show_more_btn:hover i::before {
+      width: 15px;
+      left: 20%;
+      animation: move 3s infinite;
+    }
+
+    .show_more_btn i::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 2px;
+      left: 20%;
+      bottom: -2px;
+      border: 2px solid var(--clr);
+      background: #272822;
+      transition: 0.2s;
+    }
+
+    .show_more_btn:hover i::after {
+      width: 15px;
+      left: 80%;
+      animation: move 3s infinite;
+    }
+
+    @keyframes move {
+      0% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(5px);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes box {
+      0% {
+        box-shadow: #27272c;
+      }
+      50% {
+        box-shadow: 0 0 25px var(--clr);
+      }
+      100% {
+        box-shadow: #27272c;
+      }
+    }
+  </style>
+
+  <body>
+    <div class="container">
+      <h1 class="display-6 text-center py-1">My To-Do List</h1>
+
+      <div class="jumbotron p-3 shadow-sm">
+        <div class="d-flex align-items-center">
+          <input
+            id="create_field"
+            name="todo"
+            autofocus
+            autocomplete="off"
+            class="form-control mr-3"
+            type="text"
+            placeholder="Add a new to do..."
+            style="flex: 1"
+          />
+          <button class="add_item btn btn-success">Add New Item</button>
         </div>
-
-        <ul id="item_list" class=""list-group pb-5>
-        </ul>
-
-        <button class="show_more">
-          Show More
-        </button>
-        <br/>
-        <br/>
-      <form action='/logout' method="POST">
-        <button> Logout <button>
-      </form>
-
-      <form action='/logout_from_all_devices' method="POST">
-        <button> Logout from all devices <button>
-      </form>
-
       </div>
-      <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
-      <script src="/browser.js"></script>
 
-    </body>
-    </html>
+      <ul id="item_list" class="" list-group pb-5></ul>
+
+      <button class="show_more_btn" style="--clr: #39ff14">
+        <span class="show_more">Show More</span><i></i>
+      </button>
+      <br />
+      <br />
+      <div class="buttons">
+        <form action="/logout" method="POST">
+          <button class="show_more_btn" style="--clr: #ff44cc">
+            <span class="show_more">Logout</span><i></i>
+          </button>
+        </form>
+
+        <form action="/logout_from_all_devices" method="POST">
+          <button class="show_more_btn" style="--clr: #ff0000">
+            <span class="show_more">Logout from all devices</span><i></i>
+          </button>
+        </form>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+    <script src="/browser.js"></script>
+  </body>
+</html>
