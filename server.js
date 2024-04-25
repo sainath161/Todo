@@ -11,6 +11,7 @@ const userModel = require("./models/userModel");
 const { isAuth } = require("./middleware/isAuth");
 const { todoDataValidation } = require("./utils/todoUtils");
 const todoModel = require("./models/todoModel");
+const rateLimiting = require("./middleware/rateLimiting");
 
 //constants
 const app = express();
@@ -38,7 +39,7 @@ app.use(express.json());
 
 app.use(
   session({
-    secret: process.env.SECRET,
+    secret: process.env.SECRET_KEY,
     store: store,
     resave: false,
     saveUninitialized: false,
@@ -55,7 +56,7 @@ app.get("/register", (req, res) => {
   return res.render("registerPage");
 });
 
-app.post("/register-form", async (req, res) => {
+app.post("/register-user", async (req, res) => {
   const { name, email, username, password } = req.body;
 
   //data validation
@@ -112,7 +113,7 @@ app.get("/login", (req, res) => {
   return res.render("loginPage");
 });
 
-app.post("/login-form", async (req, res) => {
+app.post("/login-user", async (req, res) => {
   console.log(req.body);
 
   const { loginId, password } = req.body;
@@ -211,9 +212,7 @@ app.post("/logout_from_all_devices", isAuth, async (req, res) => {
 //todo api's
 
 //create
-app.post("/create-item", isAuth, async (req, res) => {
-  console.log(req.body);
-
+app.post("/create-item", isAuth, rateLimiting, async (req, res) => {
   const todoText = req.body.todo;
   const username = req.session.user.username;
   try {
@@ -253,11 +252,32 @@ app.post("/create-item", isAuth, async (req, res) => {
 });
 
 //read
+//read-item?skip=10
 app.get("/read-item", isAuth, async (req, res) => {
   const username = req.session.user.username;
+  const SKIP = Number(req.query.skip) || 0;
+  const LIMIT = 5;
 
   try {
-    const todoDb = await todoModel.find({ username });
+    // const todoDb = await todoModel.find({ username });
+    // pagination, match
+    const todoDb = await todoModel.aggregate([
+      {
+        $match: { username: username },
+      },
+      {
+        $skip: SKIP,
+      },
+      {
+        $limit: LIMIT,
+      },
+      // {
+      //   $facet: {
+      //     data: [{ $skip: SKIP }, { $limit: LIMIT }],
+      //   },
+      // },
+      // todoDb[0].data
+    ]);
 
     console.log(todoDb);
 
@@ -349,7 +369,8 @@ app.post("/edit-item", isAuth, async (req, res) => {
   //edit the todo
 });
 
-app.post("/delete-item", isAuth, async (req, res) => {
+app.delete("/delete-item", isAuth, async (req, res) => {
+  console.log(req.body);
   const { todoId } = req.body;
   const username = req.session.user.username;
 
@@ -404,6 +425,6 @@ app.post("/delete-item", isAuth, async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log("Server is running on 👇");
-  console.log(`http://localhost:${PORT}`);
+  console.log("Server is running:");
+  console.log(`http://localhost:${PORT}/`);
 });

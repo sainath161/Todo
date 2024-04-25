@@ -1,6 +1,6 @@
-const isEmailRegex = ({ str }) => {
+const isEmailRgex = ({ str }) => {
   const isEmail =
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i.test(
       str
     );
   return isEmail;
@@ -18,7 +18,7 @@ const userDataValidation = ({ name, email, username, password }) => {
 
     // Email validation (emails should  look like foo@bar.com) it can contain numbers but should not contain uppercase
     // let emailIsValid = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
-    if (!isEmailRegex({ str: email })) reject("Email is invalid");
+    if (!isEmailRgex({ str: email })) reject("Email is invalid");
 
     // Username validation
     if (typeof username !== "string" || username.length < 5)
@@ -52,4 +52,4 @@ const userDataValidation = ({ name, email, username, password }) => {
   });
 };
 
-module.exports = { userDataValidation, isEmailRegex };
+module.exports = { userDataValidation, isEmailRgex };
