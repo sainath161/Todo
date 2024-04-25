@@ -25,6 +25,9 @@ const userDataValidation = ({ name, email, username, password }) => {
       reject("Username should contain at least  5 characters");
     if (username.indexOf(" ") != -1) reject("Username cannot contain spaces");
     if (username.length > 20) reject("Username can't exceed 20 characters");
+    // username should not contain uppercase
+    if (/[A-Z]/.test(username))
+      reject("Username should not contain UpperCase letters");
     // if (/[^a-z]/.test(username))
     //   reject("Username should contain only lowercase letters");
 

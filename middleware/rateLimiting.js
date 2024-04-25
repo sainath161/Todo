@@ -22,7 +22,7 @@ const rateLimiting = async (req, res, next) => {
     //R2 -- Rnth, compare the time diff
     const diff = (Date.now() - accessDb.req_time) / 1000;
 
-    // 1hit / per second
+    // 1 hits / per second
     if (diff < 1) {
       return res.send({
         status: 400,
