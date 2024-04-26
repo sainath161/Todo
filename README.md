@@ -33,7 +33,7 @@ https://github.com/sainath161/Todo
 
 #### Install dependencies:
 
-`cd glassmorphism-todo-app`
+`cd todo`
 `npm install`
 
 #### Set up environment variables:
