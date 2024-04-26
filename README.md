@@ -29,7 +29,7 @@ The To-Do App is a modern web application designed to help users manage their ta
 
 #### Clone the repository:
 
-`https://github.com/sainath161/Todo`
+https://github.com/sainath161/Todo
 
 #### Install dependencies:
 
@@ -59,4 +59,4 @@ Access the application in your web browser at `http://localhost:3000`.
 
 ## Check the live demo here
 
-`https://todo-app-t8k9.onrender.com`
+https://todo-app-t8k9.onrender.com
